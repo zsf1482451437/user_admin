@@ -1,4 +1,4 @@
-const pool = require("../db/connection");
+const pool = require("./db");
 
 class UserModel {
   // 获取所有用户
