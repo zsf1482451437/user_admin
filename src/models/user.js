@@ -4,9 +4,12 @@ const ErrorHandler = require("../utils/errorHandler");
 
 const GET_ALL_USERS_SQL = "SELECT * FROM users";
 const GET_USER_BY_ID_SQL = "SELECT * FROM users WHERE id = ?";
-const ADD_USER_SQL = "INSERT INTO users (name, email) VALUES (?, ?)";
-const UPDATE_USER_SQL = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+const ADD_USER_SQL =
+  "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+const UPDATE_USER_SQL =
+  "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
 const DELETE_USER_SQL = "DELETE FROM users WHERE id = ?";
+const LOGIN_USER_SQL = "SELECT * FROM users WHERE email = ? AND password = ?";
 
 const SELECT_USER_SUCCESS_MESSAGE = "查询成功";
 const CREATE_USER_SUCCESS_MESSAGE = "创建成功";
@@ -48,19 +51,19 @@ class UserModel {
     });
   }
 
-  static async create(name, email) {
+  static async create(name, email, password) {
     return await UserModel.executeQuery({
       query: ADD_USER_SQL,
-      params: [name, email],
+      params: [name, email, password],
       showData: false,
       successMessage: CREATE_USER_SUCCESS_MESSAGE,
     });
   }
 
-  static async update(id, name, email) {
+  static async update(id, name, email, password) {
     return await UserModel.executeQuery({
       query: UPDATE_USER_SQL,
-      params: [name, email, id],
+      params: [name, email, password, id],
       showData: false,
       successMessage: UPDATE_USER_SUCCESS_MESSAGE,
     });
@@ -72,6 +75,16 @@ class UserModel {
       params: [id],
       showData: false,
       successMessage: DELETE_USER_SUCCESS_MESSAGE,
+    });
+  }
+
+  static async login(email, password) {
+    return await UserModel.executeQuery({
+      query: LOGIN_USER_SQL,
+      params: [email, password],
+      singleRecord: true,
+      successMessage: "登录成功",
+      errorMessage: "登录失败，用户名或密码错误",
     });
   }
 }

@@ -1,4 +1,3 @@
-const Router = require("koa-router");
 const UserService = require("../services/user");
 
 class UserController {
@@ -12,19 +11,24 @@ class UserController {
   }
 
   static async createUser(ctx) {
-    const { name, email } = ctx.request.body;
-    ctx.body = await UserService.createUser(name, email);
+    const { name, email, password } = ctx.request.body;
+    ctx.body = await UserService.createUser(name, email, password);
   }
 
   static async updateUser(ctx) {
     const { id } = ctx.params;
-    const { name, email } = ctx.request.body;
-    ctx.body = await UserService.updateUser(id, name, email);
+    const { name, email, password } = ctx.request.body;
+    ctx.body = await UserService.updateUser(id, name, email, password);
   }
 
   static async deleteUser(ctx) {
     const { id } = ctx.params;
     ctx.body = await UserService.deleteUser(id);
+  }
+
+  static async login(ctx) {
+    const { email, password } = ctx.request.body;
+    ctx.body = await UserService.loginUser(email, password);
   }
 }
 
